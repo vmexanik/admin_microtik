@@ -1,4 +1,4 @@
-Deploy-on-stage:
+Deploy-on-staging:
   script:
   - /home/gitlab-runner/scripts/deploy_mmc.sh mmc@staging.mmc.starlink.ua:/home/mmc/web/staging.mmc.starlink.ua
   type: deploy
