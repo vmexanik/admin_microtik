@@ -10,17 +10,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
     /**
      * Display the registration view.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
-    public function create()
+    public function create(Request $request): View
     {
-        return view('auth.register');
+        $users=User::all();
+
+        return view('auth.register',[
+            'request' => $request,
+            'users'=>$users
+        ]);
     }
 
     /**
@@ -34,21 +40,25 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'name' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => $request->name,
+            'user_type' => 'user',
             'password' => Hash::make($request->password),
         ]);
 
         event(new Registered($user));
 
-        Auth::login($user);
+        return redirect(route('register'));
+    }
 
-        return redirect(RouteServiceProvider::HOME);
+    public function destroy(Request $request){
+
+        User::where('id', $request->id)->delete();
+        return redirect('/register');
     }
 }
