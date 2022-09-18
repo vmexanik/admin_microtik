@@ -1,0 +1,10 @@
+Deploy-on-staging:
+  script:
+  - /home/gitlab-runner/scripts/deploy_mmc.sh mmc@staging.mmc.starlink.ua:/home/mmc/web/staging.mmc.starlink.ua
+  only:
+  - staging
+Deploy-on-production:
+  script:
+  - /home/gitlab-runner/scripts/deploy_mmc.sh mmc@mmc.starlink.ua:/home/mmc/web/mmc.starlink.ua
+  only:
+  - master
