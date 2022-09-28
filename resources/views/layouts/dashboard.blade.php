@@ -8,7 +8,7 @@
 {{--            </div>--}}
 {{--        @endif--}}
 {{--</form>--}}
-@if (isset($error))
+@if (!empty($error))
     <div class="alert alert-danger mb-2 mt-2">
         {{ $error }}
     </div>

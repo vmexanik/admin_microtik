@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Router;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [Router::class,'index'])->middleware('auth');
 
+Route::resource('router', Router::class)->middleware('auth');
 //Route::get('/dashboard', function () {
 //    return view('dashboard');
 //})->middleware(['auth'])->name('dashboard');

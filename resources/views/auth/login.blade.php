@@ -2,7 +2,7 @@
 <main class="flex-shrink-0">
     <div class="container">
         <div class="container d-flex justify-content-center">
-            <form method="POST" action="{{ route('login') }}" class="w-50 border rounded p-3 align-self-center">
+            <form method="POST" action="{{ route('login') }}" class="w-50 border rounded p-3 align-self-center mt-3">
                 @csrf
                 <!-- Email Address -->
                 <div class="mb-3">
