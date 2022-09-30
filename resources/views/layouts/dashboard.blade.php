@@ -39,12 +39,12 @@
             @endif
             <td>
                 @if(isset($router->error))
-                    <span class="badge badge-warning">{{$router->status}}</span>
+                    <span class="badge bg-danger">{{$router->status}}</span>
                     <span class="invalid-feedback d-block">
                         {{$router->error}}
                     </span>
                 @else
-                    <span class="badge badge-success">{{$router->status}}</span>
+                    <span class="badge bg-success">{{$router->status}}</span>
                 @endif
             </td>
             <td>
