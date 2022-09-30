@@ -19,20 +19,37 @@
         <th scope="col">#</th>
         <th scope="col">Название</th>
         <th scope="col">IP</th>
+        <th scope="col">Время работы</th>
+        <th scope="col">Версия ОС</th>
         <th scope="col">Статус</th>
         <th scope="col">Действие</th>
     </tr>
     </thead>
     <tbody>
-    <tr class="align-middle">
-        <td scope="row">1</td>
-        <td>САМЫЙ ГЛАВНЫЙ РОУТЕР</td>
-        <td>000.000.000.000</td>
-        <td>СПИТ</td>
-        <td>
-            <button type="button" class="btn btn-success">Управление</button>
-        </td>
-    </tr>
+    @foreach($routers as $router)
+        <tr class="align-middle">
+            <td scope="row">{{$router->id}}</td>
+            <td>{{$router->name}}</td>
+            <td>{{$router->ip_address}}</td>
+            @if(!isset($router->error))
+                <td>{{$router->uptime}}</td>
+                <td>{{$router->os_version}}</td>
+            @else
+                <td colspan="2"></td>
+            @endif
+            <td>
+                <span>{{$router->status}}</span>
+                @if(isset($router->error))
+                    <span class="invalid-feedback d-block">
+                        {{$router->error}}
+                    </span>
+                @endif
+            </td>
+            <td>
+                <button type="button" class="btn btn-success">Управление</button>
+            </td>
+        </tr>
+    @endforeach
     </tbody>
 </table>
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Router;
+use App\Http\Controllers\Main;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [Router::class,'index'])->middleware('auth');
+Route::get('/', [Main::class,'index'])->middleware('auth');
 
 Route::resource('router', Router::class)->middleware('auth');
 //Route::get('/dashboard', function () {

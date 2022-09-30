@@ -29,31 +29,6 @@ class Router extends Controller
      * @throws QueryException
      * @throws ConfigException
      */
-    public function connect()
-    {
-//
-//        83.150.204.82:8728
-//vmexanik : jMap9Kp2QnsH3h
-
-        $errorMsg='';
-
-        try{
-            $config = new Config([
-                'host' => '83.150.204.82',
-                'user' => 'vmexanik',
-                'pass' => 'jMap9Kp2QnsH3h',
-                'port' => 8728,
-            ]);
-            $client = new Client($config);
-        }catch (Exception $e){
-            $errorMsg = mb_convert_encoding($e->getMessage(),'UTF-8');
-        }
-
-
-        return view('welcome', [
-            'error'=>$errorMsg
-        ]);
-    }
 
     public function index(): Factory|View|Application
     {
