@@ -24,7 +24,7 @@
                         <td>{{$router->password}}</td>
                         <td>{{$router->port}}</td>
                         <td class="d-flex">
-                            <button type="button" class="btn btn-outline-success" style="margin-right: 5px">Редактировать</button>
+                            <a type="button" class="btn btn-outline-success" style="margin-right: 5px" href="{{ route('router.edit',$router->id) }}">Редактировать</a>
                             <form action="{{ route('router.destroy',$router->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')

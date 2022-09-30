@@ -98,24 +98,41 @@ class Router extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Router $fop
-     * @return Response
+     * @param \App\Models\Router $router
+     * @return Application|Factory|View
      */
-    public function edit(\App\Models\Router $fop)
+    public function edit(\App\Models\Router $router)
     {
-        //
+        return view('router.edit',compact('router'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param \App\Models\Router $fop
-     * @return Response
+     * @param \App\Models\Router $router
+     * @return Application|Redirector|RedirectResponse
      */
-    public function update(Request $request, \App\Models\Router $fop)
+    public function update(Request $request, \App\Models\Router $router)
     {
-        //
+        $request->validate(  [
+            'name' => 'required',
+            'ip_address'=>'required|ip',
+            'login'=>'required',
+            'password'=>'required',
+            'port'=>'required'
+        ]);
+
+        $dataForUpdate['name']=$request->name;
+        $dataForUpdate['ip_address']=$request->ip_address;
+        $dataForUpdate['login']=$request->login;
+        $dataForUpdate['password']=$request->password;
+        $dataForUpdate['port']=$request->port;
+
+
+        $router->update($dataForUpdate);
+
+        return redirect('/router')->with('status','Сохранение успешно!');
     }
 
     /**

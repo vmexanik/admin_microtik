@@ -22,7 +22,6 @@
         <th scope="col">Время работы</th>
         <th scope="col">Версия ОС</th>
         <th scope="col">Статус</th>
-        <th scope="col">Действие</th>
     </tr>
     </thead>
     <tbody>
@@ -46,9 +45,6 @@
                 @else
                     <span class="badge bg-success">{{$router->status}}</span>
                 @endif
-            </td>
-            <td>
-                <button type="button" class="btn btn-success">Управление</button>
             </td>
         </tr>
     @endforeach

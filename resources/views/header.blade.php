@@ -24,7 +24,10 @@
                     @if (Route::has('login'))
                         @auth
                             <li class="nav-item">
-                                <a class="nav-link {{ (Request::is('/') ? 'active' : '') }}" aria-current="page" href="/router">Роутеры</a>
+                                <a class="nav-link {{ (Request::is('/') ? 'active' : '') }}" aria-current="page" href="/">Главная</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ (Request::is('router') ? 'active' : '') }}" aria-current="page" href="/router">Роутеры</a>
                             </li>
                             @if (Auth::user()->user_type=='admin')
                                 <li class="nav-item">
