@@ -40,8 +40,8 @@ class Main extends Model
                 $routers[$key]['error'] = mb_convert_encoding($e->getMessage(), 'UTF-8');
                 $routers[$key]['status'] = "Ошибка";
             }
-
-            return $routers;
         }
+
+        return $routers;
     }
 }
