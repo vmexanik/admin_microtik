@@ -21,8 +21,6 @@ class Main extends Model
     public function checkStatus($routers)
     {
         foreach ($routers as $key=>$router) {
-            $errorMsg = '';
-
             try {
                 $config = new Config([
                     'host' => $router->ip_address,

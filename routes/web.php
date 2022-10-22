@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Router;
 use App\Http\Controllers\Main;
+use App\Http\Controllers\UpdateRouter;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [Main::class,'index'])->middleware('auth');
 
 Route::resource('router', Router::class)->middleware('auth');
+
+Route::get('/update_router', [UpdateRouter::class,'index'])->middleware('auth');
+Route::get('/update_router/{id}/update', [UpdateRouter::class,'update'])->middleware('auth');
+
 //Route::get('/dashboard', function () {
 //    return view('dashboard');
 //})->middleware(['auth'])->name('dashboard');

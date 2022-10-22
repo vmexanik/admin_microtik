@@ -29,6 +29,9 @@
                             <li class="nav-item">
                                 <a class="nav-link {{ (Request::is('router') ? 'active' : '') }}" aria-current="page" href="/router">Роутеры</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ (Request::is('update_router') ? 'active' : '') }}" aria-current="page" href="/update_router">Обновление ПО</a>
+                            </li>
                             @if (Auth::user()->user_type=='admin')
                                 <li class="nav-item">
                                     <a class="nav-link {{ (Request::is('register') ? 'active' : '') }}" href="/register">Регистрация</a>
