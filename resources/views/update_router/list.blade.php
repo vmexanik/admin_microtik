@@ -17,24 +17,20 @@
             @if (count($routers)>0)
                 @foreach($routers as $router)
                     <tr class="align-middle">
-                        <td scope="row">{{$router->id}}</td>
+                        <td scope="row" router-id="{{$router->id}}">{{$router->id}}</td>
                         <td>{{$router->name}}</td>
                         <td>{{$router->ip_address}}:{{$router->port}}</td>
-                        <td>{{$router->status}}</td>
-                        <td>{{$router->installed_version}} - {{$router->channel}}</td>
-                        <td>
-                            @if ($router->latest_version!='')
-                                Версия: {{$router->latest_version}} - {{$router->channel}}
-                            @endif
-                        </td>
+                        <td id="status-{{$router->id}}"></td>
+                        <td id="installed_version-{{$router->id}}"></td>
+                        <td id="latest_version-{{$router->id}}"></td>
                         <td class="d-flex">
-                            @if ($router->latest_version!=$router->installed_version && $router->latest_version!='')
+{{--                            @if ($router->latest_version!=$router->installed_version && $router->latest_version!='')--}}
                             <a type="button" class="btn btn-outline-success" style="margin-right: 5px"
                                href="/update_router/{{$router->id}}/update">Обновить ПО</a>
-                            @else
-                                <a type="button" class="btn btn-outline-success disabled" style="margin-right: 5px"
-                                   href="#">Обновить ПО</a>
-                            @endif
+{{--                            @else--}}
+{{--                                <a type="button" class="btn btn-outline-success disabled" style="margin-right: 5px"--}}
+{{--                                   href="#">Обновить ПО</a>--}}
+{{--                            @endif--}}
                         </td>
                     </tr>
                 @endforeach
