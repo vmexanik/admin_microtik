@@ -41,9 +41,7 @@ class UpdateRouter extends Controller
             while (true) {
                 $response=$this->getDataFromStreamAsArray($socket);
 
-                if (isset($response['status'])) {
-                    $message = $response['status'];
-                } elseif (empty($response)) {
+                if (empty($response)) {
                     $status = 'close';
                 }
 
@@ -82,7 +80,7 @@ class UpdateRouter extends Controller
                 ob_flush();
                 flush();
 
-                if (empty($response)) {
+                if ($status == 'close') {
                     break;
                 }
 
@@ -154,7 +152,7 @@ class UpdateRouter extends Controller
                 ob_flush();
                 flush();
 
-                if (empty($response)) {
+                if ($status == 'close') {
                     break;
                 }
 
