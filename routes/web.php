@@ -3,6 +3,7 @@
 use App\Http\Controllers\Router;
 use App\Http\Controllers\Main;
 use App\Http\Controllers\UpdateRouter;
+use App\Http\Controllers\UserRouter;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +25,10 @@ Route::get('/update_router', [UpdateRouter::class,'index'])->middleware('auth');
 Route::get('/check_update_router_stream/{id}', [UpdateRouter::class,'check_update_stream'])->middleware('auth');
 Route::get('/update_router_stream/{id}', [UpdateRouter::class,'update_router_stream'])->middleware('auth');
 Route::get('/update_router/{id}/update', [UpdateRouter::class,'update'])->middleware('auth');
+
+Route::get('/user_router', [UserRouter::class,'index'])->middleware('auth');
+
+
 
 //Route::get('/dashboard', function () {
 //    return view('dashboard');

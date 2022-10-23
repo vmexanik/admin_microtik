@@ -28,17 +28,26 @@
                     @if (Route::has('login'))
                         @auth
                             <li class="nav-item">
-                                <a class="nav-link {{ (Request::is('/') ? 'active' : '') }}" aria-current="page" href="/">Главная</a>
+                                <a class="nav-link {{ (Request::is('/') ? 'active' : '') }}" aria-current="page"
+                                   href="/">Главная</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ (Request::is('router') ? 'active' : '') }}" aria-current="page" href="/router">Роутеры</a>
+                                <a class="nav-link {{ (Request::is('router') ? 'active' : '') }}" aria-current="page"
+                                   href="/router">Роутеры</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ (Request::is('update_router') ? 'active' : '') }}" aria-current="page" href="/update_router">Обновление ПО</a>
+                                <a class="nav-link {{ (Request::is('update_router') ? 'active' : '') }}" aria-current="page"
+                                   href="/update_router">Обновление ПО</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ (Request::is('user_router') ? 'active' : '') }}"
+                                   aria-current="page"
+                                   href="/user_router">Изменение паролей</a>
                             </li>
                             @if (Auth::user()->user_type=='admin')
                                 <li class="nav-item">
-                                    <a class="nav-link {{ (Request::is('register') ? 'active' : '') }}" href="/register">Регистрация</a>
+                                    <a class="nav-link {{ (Request::is('register') ? 'active' : '') }}"
+                                       href="/register">Регистрация</a>
                                 </li>
                             @endif
                         @endauth

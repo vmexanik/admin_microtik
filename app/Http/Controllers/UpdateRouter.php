@@ -160,7 +160,6 @@ class UpdateRouter extends Controller
                 usleep(50000);
             }
 
-
             $getRebootQuery = new Query('/system/reboot');
             $socket = $client->query($getRebootQuery)->getSocket();
 
