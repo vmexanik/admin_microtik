@@ -3,6 +3,10 @@
 <head>
     @vite('resources/sass/app.scss')
 
+    @if(Request::is('update_router'))
+        @vite('resources/js/update_router.js')
+    @endif
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 

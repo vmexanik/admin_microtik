@@ -1,9 +1,7 @@
 import './bootstrap';
 
-import Alpine from 'alpinejs';
-import $ from "jquery";
+import $ from 'jquery';
+// export for others scripts to use
 window.$ = $;
+window.jQuery = $;
 
-window.Alpine = Alpine;
-
-Alpine.start();

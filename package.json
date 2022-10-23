@@ -7,7 +7,6 @@
     "devDependencies": {
         "@popperjs/core": "^2.10.2",
         "@tailwindcss/forms": "^0.5.2",
-        "alpinejs": "^3.4.2",
         "autoprefixer": "^10.4.2",
         "axios": "^0.27",
         "bootstrap": "^5.1.3",

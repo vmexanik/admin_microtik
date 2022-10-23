@@ -22,6 +22,7 @@ Route::resource('router', Router::class)->middleware('auth');
 
 Route::get('/update_router', [UpdateRouter::class,'index'])->middleware('auth');
 Route::get('/check_update_router_stream/{id}', [UpdateRouter::class,'check_update_stream'])->middleware('auth');
+Route::get('/update_router_stream/{id}', [UpdateRouter::class,'update_router_stream'])->middleware('auth');
 Route::get('/update_router/{id}/update', [UpdateRouter::class,'update'])->middleware('auth');
 
 //Route::get('/dashboard', function () {

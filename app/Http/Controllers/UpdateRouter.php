@@ -12,10 +12,10 @@ class UpdateRouter extends Controller
 {
     public function index()
     {
-        $routers= Router::orderBy('id', 'asc')->get();
+        $routers = Router::orderBy('id', 'asc')->get();
 
-        return view('update_router/list',[
-            'routers'=>$routers
+        return view('update_router/list', [
+            'routers' => $routers
         ]);
     }
 
@@ -24,7 +24,7 @@ class UpdateRouter extends Controller
         return response()->stream(function () {
 
             $id = request()->route('id');
-            $router= Router::where('id',$id)->first();
+            $router = Router::where('id', $id)->first();
 
             $config = new Config([
                 'host' => $router->ip_address,
@@ -33,60 +33,57 @@ class UpdateRouter extends Controller
                 'port' => $router->port,
             ]);
             $client = new Client($config);
-            $getCheckUpdateQuery=new Query('/system/package/update/check-for-updates');
-            $socket=$client->query($getCheckUpdateQuery)->getSocket();
+            $getCheckUpdateQuery = new Query('/system/package/update/check-for-updates');
+            $socket = $client->query($getCheckUpdateQuery)->getSocket();
 
-            $status='open';
+            $status = 'open';
 
             while (true) {
-                try{
-                    $msg= $this->read($socket);
-                }catch (Exception $e){
-                    $msg= $e->getMessage();
-                }
-
-                $response=[];
-                foreach ($msg as $item){
-                    if ($item[0]!='!') {
-                        list($key, $value) = explode("=", $item);
-                        $response[$key] = $value;
-                    }
-                }
+                $response=$this->getDataFromStreamAsArray($socket);
 
                 if (isset($response['status'])) {
                     $message = $response['status'];
-                }else{
-                    $message = $msg[0];
-                    $status='close';
+                } else {
+                    $message = $response[0];
+                    $status = 'close';
                 }
 
-                if (!isset($response['latest-version'])){
-                    $response['latest-version']='';
+                if (!isset($response['latest-version'])) {
+                    $response['latest-version'] = '';
                 }
 
-                if (!isset($response['installed-version'])){
-                    $response['installed-version']='';
+                if (!isset($response['installed-version'])) {
+                    $response['installed-version'] = '';
                 }
 
-                if (!isset($response['status'])){
-                    $response['status']='';
+                if (!isset($response['status'])) {
+                    $response['status'] = '';
                 }
 
-                if (!isset($response['channel'])){
-                    $response['channel']='';
+                if (!isset($response['channel'])) {
+                    $response['channel'] = '';
                 }
 
-                echo "data: ".json_encode([
-                        'router_status'=>$response['status'],
-                        'installed_version'=>"{$response['installed-version']} - {$response['channel']}",
-                        'latest_version'=>"{$response['latest-version']} - {$response['channel']}",
-                        'status'=>$status
-                    ])."\n\n";
+                if ($response['latest-version'] == $response['installed-version'] || $response['latest-version'] == '') {
+                    $checkbox = 'disable';
+                } else {
+                    $checkbox = 'enable';
+                }
+
+                $this->printPing();
+
+                echo "data: " . json_encode([
+                        'router_status' => $response['status'],
+                        'installed_version' => "{$response['installed-version']} - {$response['channel']}",
+                        'latest_version' => "{$response['latest-version']} - {$response['channel']}",
+                        'checkbox' => $checkbox,
+                        'status' => $status
+                    ]) . "\n\n";
 
                 ob_flush();
                 flush();
 
-                if ($message=="!done"){
+                if ($message == "!done") {
                     break;
                 }
 
@@ -98,17 +95,120 @@ class UpdateRouter extends Controller
         ]);
     }
 
-    function read($socket)
+    public function update_router_stream()
+    {
+        return response()->stream(function () {
+
+            $id = request()->route('id');
+            $router = Router::where('id', $id)->first();
+
+            $config = new Config([
+                'host' => $router->ip_address,
+                'user' => $router->login,
+                'pass' => $router->password,
+                'port' => $router->port,
+                'socket_blocking' => false
+            ]);
+            $client = new Client($config);
+            $getDownloadQuery = new Query('/system/package/update/download');
+            $socket = $client->query($getDownloadQuery)->getSocket();
+
+            $status = 'open';
+            while (true) {
+                $response=$this->getDataFromStreamAsArray($socket);
+
+                if (isset($response['status'])) {
+                    $message = $response['status'];
+                } else {
+                    $message = $response[0];
+                    $status = 'close';
+                }
+
+                if (!isset($response['latest-version'])) {
+                    $response['latest-version'] = '';
+                }
+
+                if (!isset($response['installed-version'])) {
+                    $response['installed-version'] = '';
+                }
+
+                if (!isset($response['status'])) {
+                    $response['status'] = '';
+                }
+
+                if (!isset($response['channel'])) {
+                    $response['channel'] = '';
+                }
+
+                $checkbox = 'disable';
+
+                $this->printPing();
+
+                echo "data: " . json_encode([
+                        'router_status' => $response['status'],
+                        'installed_version' => "{$response['installed-version']} - {$response['channel']}",
+                        'latest_version' => "{$response['latest-version']} - {$response['channel']}",
+                        'checkbox' => $checkbox,
+                        'status' => $status
+                    ]) . "\n\n";
+
+
+                ob_flush();
+                flush();
+
+                if ($message == "!done") {
+                    break;
+                }
+
+                usleep(50000);
+            }
+
+            if ($response['installed-version']!=$response['latest-version']) {
+
+                $getRebootQuery = new Query('/system/reboot');
+                $socket = $client->query($getRebootQuery)->getSocket();
+
+                $responseReboot=$this->getDataFromStreamAsArray($socket);
+
+                $responseReboot['status'] = 'rebooting';
+
+                $this->printPing();
+
+                echo "data: " . json_encode([
+                        'router_status' => $responseReboot['status'],
+                        'installed_version' => "{$response['installed-version']} - {$response['channel']}",
+                        'latest_version' => "{$response['latest-version']} - {$response['channel']}",
+                        'checkbox' => $checkbox,
+                        'status' => 'close'
+                    ]) . "\n\n";
+            }else{
+                $this->printPing();
+
+                echo "data: " . json_encode([
+                        'router_status' => $response['status'],
+                        'installed_version' => "{$response['installed-version']} - {$response['channel']}",
+                        'latest_version' => "{$response['latest-version']} - {$response['channel']}",
+                        'checkbox' => $checkbox,
+                        'status' => 'close'
+                    ]) . "\n\n";
+            }
+
+        }, 200, [
+            'Cache-Control' => 'no-cache',
+            'Content-Type' => 'text/event-stream',
+        ]);
+    }
+
+    function read($socket): array
     {
         $_ = "";
 
         $RESPONSE = array();
-        $receiveddone = false;
+        $received_done = false;
         while (true) {
             // Read the first byte of input which gives us some or all of the length
             // of the remaining reply.
             $BYTE = ord(fread($socket, 1));
-            $LENGTH = 0;
             // If the first bit is set then we need to remove the first four bits, shift left 8
             // and then read another byte in.
             // We repeat this for the second and third bits.
@@ -146,41 +246,41 @@ class UpdateRouter extends Controller
                     $_ .= fread($socket, $toread);
                     $retlen = strlen($_);
                 }
-                $RESPONSE[] = preg_replace('/^=/mi','',$_);
+                $RESPONSE[] = preg_replace('/^=/mi', '', $_);
             }
             // If we get a !done, make a note of it.
-            if ($_ == "!done" || preg_match('/section=\d+/mi',$_))
-                $receiveddone = true;
+            if ($_ == "!done" || preg_match('/section=\d+/mi', $_))
+                $received_done = true;
 
-            if ($receiveddone)
+            if ($received_done)
                 break;
         }
 
         return $RESPONSE;
     }
 
-    public function update($id)
+    private function getDataFromStreamAsArray($socket): array
     {
-        $router= Router::where('id',$id)->first();
-
         try {
-            $config = new Config([
-                'host' => $router->ip_address,
-                'user' => $router->login,
-                'pass' => $router->password,
-                'port' => $router->port,
-                'socket_blocking'=>false
-            ]);
-            $client = new Client($config);
-            $getUptimeQuery=new Query('/system/package/update/download');
-            $data=$client->query($getUptimeQuery)->read();
-
-            $getUptimeQuery=new Query('/system/reboot');
-            $data=$client->query($getUptimeQuery)->read();
-
+            $msg = $this->read($socket);
         } catch (Exception $e) {
-//            $routers[$key]['error'] = mb_convert_encoding($e->getMessage(), 'UTF-8');
-//            $routers[$key]['status'] = "Ошибка";
+            $msg[0] = $e->getMessage();
         }
+
+        $response = [];
+        foreach ($msg as $item) {
+            if ($item[0] != '!') {
+                list($key, $value) = explode("=", $item);
+                $response[$key] = $value;
+            }
+        }
+
+        return $response;
+    }
+
+    private function printPing()
+    {
+        echo "event: ping\n",
+            'data: {"time": "' . date("Y-m-d\TH:i:sO") . '"}', "\n\n";
     }
 }
