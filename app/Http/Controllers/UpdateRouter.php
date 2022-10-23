@@ -43,8 +43,7 @@ class UpdateRouter extends Controller
 
                 if (isset($response['status'])) {
                     $message = $response['status'];
-                } else {
-                    $message = $response[0];
+                } elseif (empty($response)) {
                     $status = 'close';
                 }
 
@@ -119,8 +118,7 @@ class UpdateRouter extends Controller
 
                 if (isset($response['status'])) {
                     $message = $response['status'];
-                } else {
-                    $message = $response[0];
+                } elseif (empty($response)) {
                     $status = 'close';
                 }
 
