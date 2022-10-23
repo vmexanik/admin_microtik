@@ -82,7 +82,7 @@ class UpdateRouter extends Controller
                 ob_flush();
                 flush();
 
-                if ($message == "!done") {
+                if (empty($response)) {
                     break;
                 }
 
@@ -154,7 +154,7 @@ class UpdateRouter extends Controller
                 ob_flush();
                 flush();
 
-                if ($message == "!done") {
+                if (empty($response)) {
                     break;
                 }
 
