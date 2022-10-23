@@ -50,7 +50,7 @@ function CheckUpdateRouter() {
 }
 
 function updateRoutes() {
-    let $checkboxes=$('table').find("input[type='checkbox']").not(':disabled').not("[name='check_all']");
+    let $checkboxes=$('table').find("input[type='checkbox']:checked").not(':disabled').not("[name='check_all']");
     $checkboxes.each(function (i,e) {
         let $id=$(e).val();
 

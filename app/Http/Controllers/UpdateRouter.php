@@ -114,9 +114,7 @@ class UpdateRouter extends Controller
             while (true) {
                 $response=$this->getDataFromStreamAsArray($socket);
 
-                if (isset($response['status'])) {
-                    $message = $response['status'];
-                } elseif (empty($response)) {
+                if (empty($response)) {
                     $status = 'close';
                 }
 
@@ -138,19 +136,22 @@ class UpdateRouter extends Controller
 
                 $checkbox = 'disable';
 
-                $this->printPing();
+                if ($status != 'close') {
 
-                echo "data: " . json_encode([
-                        'router_status' => $response['status'],
-                        'installed_version' => "{$response['installed-version']} - {$response['channel']}",
-                        'latest_version' => "{$response['latest-version']} - {$response['channel']}",
-                        'checkbox' => $checkbox,
-                        'status' => $status
-                    ]) . "\n\n";
+                    $this->printPing();
+
+                    echo "data: " . json_encode([
+                            'router_status' => $response['status'],
+                            'installed_version' => "{$response['installed-version']} - {$response['channel']}",
+                            'latest_version' => "{$response['latest-version']} - {$response['channel']}",
+                            'checkbox' => $checkbox,
+                            'status' => $status
+                        ]) . "\n\n";
 
 
-                ob_flush();
-                flush();
+                    ob_flush();
+                    flush();
+                }
 
                 if ($status == 'close') {
                     break;
@@ -159,35 +160,24 @@ class UpdateRouter extends Controller
                 usleep(50000);
             }
 
-            if ($response['installed-version']!=$response['latest-version']) {
 
-                $getRebootQuery = new Query('/system/reboot');
-                $socket = $client->query($getRebootQuery)->getSocket();
+            $getRebootQuery = new Query('/system/reboot');
+            $socket = $client->query($getRebootQuery)->getSocket();
 
-                $responseReboot=$this->getDataFromStreamAsArray($socket);
+            $responseReboot=$this->getDataFromStreamAsArray($socket);
 
-                $responseReboot['status'] = 'rebooting';
+            $responseReboot['status'] = 'rebooting';
 
-                $this->printPing();
+            $this->printPing();
 
-                echo "data: " . json_encode([
-                        'router_status' => $responseReboot['status'],
-                        'installed_version' => "{$response['installed-version']} - {$response['channel']}",
-                        'latest_version' => "{$response['latest-version']} - {$response['channel']}",
-                        'checkbox' => $checkbox,
-                        'status' => 'close'
-                    ]) . "\n\n";
-            }else{
-                $this->printPing();
+            echo "data: " . json_encode([
+                    'router_status' => $responseReboot['status'],
+                    'installed_version' => "{$response['installed-version']} - {$response['channel']}",
+                    'latest_version' => "{$response['latest-version']} - {$response['channel']}",
+                    'checkbox' => $checkbox,
+                    'status' => 'close'
+                ]) . "\n\n";
 
-                echo "data: " . json_encode([
-                        'router_status' => $response['status'],
-                        'installed_version' => "{$response['installed-version']} - {$response['channel']}",
-                        'latest_version' => "{$response['latest-version']} - {$response['channel']}",
-                        'checkbox' => $checkbox,
-                        'status' => 'close'
-                    ]) . "\n\n";
-            }
 
         }, 200, [
             'Cache-Control' => 'no-cache',
