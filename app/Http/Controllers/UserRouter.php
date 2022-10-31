@@ -51,12 +51,12 @@ class UserRouter extends Controller
                         }
 
                         if (empty($dataUpdate)){
-                            $return[$router]="Успех! $username:$password";
+                            $return[$router]="<span class=\"badge bg-success\">Успех! $username:$password</span>";
                         }
                     }
                 }
             }else{
-                $return[$router]="Неудача! $username не найден в списке пользователей роутера";
+                $return[$router]="<span class=\"badge bg-danger\">Неудача! $username не найден в списке пользователей роутера</span>";
             }
         }
 

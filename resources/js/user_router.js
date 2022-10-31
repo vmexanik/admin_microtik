@@ -20,7 +20,7 @@ function updateUserPasswords() {
             }
         }).done(function (data) {
             $id.forEach(function (currentValue, index) {
-                $('table').find("input[type='checkbox'][value=" + currentValue + "]").parents('tr').find('td.status').text(data[currentValue]);
+                $('table').find("input[type='checkbox'][value=" + currentValue + "]").parents('tr').find('td.status').html(data[currentValue]);
             })
         });
     }
