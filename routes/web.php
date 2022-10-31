@@ -27,6 +27,7 @@ Route::get('/update_router_stream/{id}', [UpdateRouter::class,'update_router_str
 Route::get('/update_router/{id}/update', [UpdateRouter::class,'update'])->middleware('auth');
 
 Route::get('/user_router', [UserRouter::class,'index'])->middleware('auth');
+Route::get('/user_router_update_password', [UserRouter::class,'update_password'])->middleware('auth');
 
 
 

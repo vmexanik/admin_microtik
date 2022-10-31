@@ -7,7 +7,8 @@ export default defineConfig({
             input: [
                 'resources/sass/app.scss',
                 'resources/js/app.js',
-                'resources/js/update_router.js'
+                'resources/js/update_router.js',
+                'resources/js/user_router.js'
             ],
             refresh: true,
         }),
