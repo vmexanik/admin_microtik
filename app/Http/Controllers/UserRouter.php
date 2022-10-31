@@ -55,6 +55,8 @@ class UserRouter extends Controller
                         }
                     }
                 }
+            }else{
+                $return[$router]="Неудача! $username не найден в списке пользователей роутера";
             }
         }
 
