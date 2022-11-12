@@ -43,7 +43,8 @@
             @endif
             </tbody>
         </table>
-        <form class="row gy-2 gx-3 align-items-end border rounded m-0" method="get" action="{{ route('router.create') }}">
+        <h3>Добавление роутера</h3>
+        <form class="row gy-2 gx-3 align-items-end border rounded m-0 pb-2" method="get" action="{{ route('router.create') }}">
             @csrf
             <div class="mb-3">
                 @if ($errors->any())
@@ -73,6 +74,26 @@
             <div class="col-auto">
                 <label for="name" class="form-label">Пароль</label>
                 <input type="text" name="password" class="form-control" id="password" value="{{old('password')}}">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-outline-primary">Добавить</button>
+            </div>
+        </form>
+        <h3 class="mt-2">Путь сохранения бекапов</h3>
+        <form class="row gy-2 gx-3 align-items-end border rounded m-0 pb-2" method="get" action="/path">
+            @csrf
+            <div class="mb-3">
+                @if ($errors->any())
+                    <div class="invalid-feedback d-block">
+                        @foreach ($errors->all() as $error)
+                            {{$error}}
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+            <div class="col">
+                <label for="name" class="form-label">Абсолютный путь</label>
+                <input type="text" name="path" class="form-control" id="path" value="{{$path}}">
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-outline-primary">Добавить</button>

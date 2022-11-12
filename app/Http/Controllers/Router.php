@@ -34,8 +34,11 @@ class Router extends Controller
     {
         $routers=\App\Models\Router::orderBy('id', 'asc')->get();
 
+        $path= \App\Models\Path::where('id', 1)->first();
+
         return view('router/list',[
-            'routers'=>$routers
+            'routers'=>$routers,
+            'path'=>$path->path
         ]);
     }
 
@@ -53,7 +56,8 @@ class Router extends Controller
                 'ip_address'=>'required|ip',
                 'login'=>'required',
                 'password'=>'required',
-                'port'=>'required'
+                'port'=>'required',
+                'ssh_port'=>'required'
             ]);
 
         if ($validator->fails()) {
@@ -68,6 +72,7 @@ class Router extends Controller
         $router->login = $request->login;
         $router->password = $request->password;
         $router->port = $request->port;
+        $router->ssh_port = $request->ssh_port;
         $router->save();
 
         return redirect('/router')->with('status','Сохранение успешно!');
@@ -120,7 +125,8 @@ class Router extends Controller
             'ip_address'=>'required|ip',
             'login'=>'required',
             'password'=>'required',
-            'port'=>'required'
+            'port'=>'required',
+            'ssh_port'=>'required'
         ]);
 
         $dataForUpdate['name']=$request->name;
@@ -128,6 +134,7 @@ class Router extends Controller
         $dataForUpdate['login']=$request->login;
         $dataForUpdate['password']=$request->password;
         $dataForUpdate['port']=$request->port;
+        $dataForUpdate['ssh_port']=$request->ssh_port;
 
 
         $router->update($dataForUpdate);
