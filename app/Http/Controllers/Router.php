@@ -36,9 +36,15 @@ class Router extends Controller
 
         $path= \App\Models\Path::where('id', 1)->first();
 
+        if (is_null($path)){
+            $path='';
+        }else{
+            $path=$path->path;
+        }
+
         return view('router/list',[
             'routers'=>$routers,
-            'path'=>$path->path
+            'path'=>$path
         ]);
     }
 
