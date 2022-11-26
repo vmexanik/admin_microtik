@@ -31,8 +31,6 @@ Route::get('/update_router/{id}/update', [UpdateRouter::class,'update'])->middle
 Route::get('/user_router', [UserRouter::class,'index'])->middleware('auth');
 Route::get('/user_router_update_password', [UserRouter::class,'update_password'])->middleware('auth');
 
-Route::get('/get_backup', [BackUpRouter::class,'index'])->middleware('auth');
-
 Route::get('/path', [Path::class,'store'])->middleware('auth');
 
 
