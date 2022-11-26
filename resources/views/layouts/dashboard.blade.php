@@ -22,6 +22,7 @@
         <th scope="col">Время работы</th>
         <th scope="col">Версия ОС</th>
         <th scope="col">Статус</th>
+        <th scope="col">Последний бекап</th>
     </tr>
     </thead>
     <tbody>
@@ -46,6 +47,7 @@
                     <span class="badge bg-success">{{$router->status}}</span>
                 @endif
             </td>
+            <td>{{$router->last_backup}}</td>
         </tr>
     @endforeach
     </tbody>
