@@ -17,8 +17,6 @@ class BackUpRouter extends Controller
     {
         $path=\App\Models\Path::where('id',1)->first()->path;
 
-        $routerModel=new RouterModel();
-
         $routers= RouterModel::all();
 
         $disk = Storage::build([
@@ -27,39 +25,34 @@ class BackUpRouter extends Controller
         ]);
 
         foreach ($routers as $router){
-            $config = new Config([
-                'host' => $router->ip_address,
-                'user' => $router->login,
-                'pass' => $router->password,
-                'port' => $router->port,
-                'ssh_port' => $router->ssh_port,
-            ]);
-
-            $client = new Client($config);
-            $userListQuery = new Query('/export');
+            $time = Carbon::now();
+            $timeUpdate=$time->toDateTimeString();
 
             try{
+                $config = new Config([
+                    'host' => $router->ip_address,
+                    'user' => $router->login,
+                    'pass' => $router->password,
+                    'port' => $router->port,
+                    'ssh_port' => $router->ssh_port,
+                ]);
+
+                $client = new Client($config);
+                $userListQuery = new Query('/export');
                 $data=$client->query($userListQuery)->read();
             }catch (Exception $e){
-                $dataForUpdate['last_backup']=$e->getMessage();
-                $dataForUpdate['id']=$router->id;
-
-                $routerModel->exists=true;
-                $routerModel->update($dataForUpdate);
+                $dataForUpdate['last_backup']=$timeUpdate." - ".$e->getMessage();
+                $router->update($dataForUpdate);
                 continue;
             }
 
             if ($disk->put("/$router->name/".date('Y-m-d')."_$router->name.rsc",$data)){
                 $time = Carbon::now();
-                $dataForUpdate['last_backup']=$time->toDateTimeString();
-                $dataForUpdate['id']=$router->id;
-                $routerModel->exists=true;
-                $routerModel->update($dataForUpdate);
+                $dataForUpdate['last_backup']=$timeUpdate;
+                $router->update($dataForUpdate);
             }else{
-                $dataForUpdate['last_backup']='Ошибка сохранения бекапа, проверь права и путь сохранения!';
-                $dataForUpdate['id']=$router->id;
-                $routerModel->exists=true;
-                $routerModel->update($dataForUpdate);
+                $dataForUpdate['last_backup']=$timeUpdate.' - Ошибка сохранения бекапа, проверь права и путь сохранения!';
+                $router->update($dataForUpdate);
             }
         }
     }

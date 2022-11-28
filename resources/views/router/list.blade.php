@@ -10,6 +10,7 @@
                 <th scope="col">Логин</th>
                 <th scope="col">Пароль</th>
                 <th scope="col">Порт</th>
+                <th scope="col">Порт SSH</th>
                 <th scope="col">Действие</th>
             </tr>
             </thead>
@@ -23,6 +24,7 @@
                         <td>{{$router->login}}</td>
                         <td>{{$router->password}}</td>
                         <td>{{$router->port}}</td>
+                        <td>{{$router->ssh_port}}</td>
                         <td class="d-flex">
                             <a type="button" class="btn btn-outline-success" style="margin-right: 5px" href="{{ route('router.edit',$router->id) }}">Редактировать</a>
                             <form action="{{ route('router.destroy',$router->id) }}" method="POST">
@@ -65,7 +67,7 @@
             </div>
             <div class="col-auto">
                 <label for="name" class="form-label">Порт</label>
-                <input type="text" name="port" class="form-control" id="port" value="@if (!old('port')){{8728}}@else{{old('port')}}@endif">
+                <input type="number" name="port" class="form-control" id="port" value="@if (!old('port')){{8728}}@else{{old('port')}}@endif">
             </div>
             <div class="col-auto">
                 <label for="name" class="form-label">Логин</label>
@@ -74,6 +76,10 @@
             <div class="col-auto">
                 <label for="name" class="form-label">Пароль</label>
                 <input type="text" name="password" class="form-control" id="password" value="{{old('password')}}">
+            </div>
+            <div class="col-auto">
+                <label for="name" class="form-label">Порт SSH</label>
+                <input type="number" name="ssh_port" class="form-control" id="port_ssh" value="{{old('ssh_port')}}">
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-outline-primary">Добавить</button>
