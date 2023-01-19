@@ -11,6 +11,7 @@
                 <th scope="col">Пароль</th>
                 <th scope="col">Порт</th>
                 <th scope="col">Порт SSH</th>
+                <th scope="col">Порт FTP</th>
                 <th scope="col">Действие</th>
             </tr>
             </thead>
@@ -25,6 +26,7 @@
                         <td>{{$router->password}}</td>
                         <td>{{$router->port}}</td>
                         <td>{{$router->ssh_port}}</td>
+                        <td>{{$router->ftp_port}}</td>
                         <td class="d-flex">
                             <a type="button" class="btn btn-outline-success" style="margin-right: 5px" href="{{ route('router.edit',$router->id) }}">Редактировать</a>
                             <form action="{{ route('router.destroy',$router->id) }}" method="POST">
@@ -80,6 +82,10 @@
             <div class="col-auto">
                 <label for="name" class="form-label">Порт SSH</label>
                 <input type="number" name="ssh_port" class="form-control" id="port_ssh" value="{{old('ssh_port')}}">
+            </div>
+            <div class="col-auto">
+                <label for="name" class="form-label">Порт FTP</label>
+                <input type="number" name="ftp_port" class="form-control" id="port_ftp" value="{{old('ftp_port')}}">
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-outline-primary">Добавить</button>

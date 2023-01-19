@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Router as RouterModel;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RouterOS\Client;
 use RouterOS\Config;
@@ -19,14 +18,9 @@ class BackUpRouter extends Controller
 
         $routers= RouterModel::all();
 
-        $disk = Storage::build([
-            'driver' => 'local',
-            'root' => $path,
-        ]);
-
         foreach ($routers as $router){
             $time = Carbon::now();
-            $timeUpdate=$time->toDateTimeString();
+            $timeUpdate=$time->toDateTimeString('minute');
 
             try{
                 $config = new Config([
@@ -38,22 +32,56 @@ class BackUpRouter extends Controller
                 ]);
 
                 $client = new Client($config);
-                $userListQuery = new Query('/export');
-                $data=$client->query($userListQuery)->read();
+                $exportQuery = new Query('/export');
+                $dataExport=$client->query($exportQuery)->read();
+                $backupFilename="$router->name.rsc";
+
+                $systemBackupQuery = new Query('/system/backup/save');
+                $systemBackupQuery->equal('name', 'system_backup_'.$timeUpdate);
+                $client->query($systemBackupQuery);
+
+                $binaryBackupFilename='system_backup_'.$timeUpdate;
+                $binaryBackupExtension='backup';
+
+                $ftp=Storage::build([
+                    'driver' => 'ftp',
+                    'host'     => $router->ip_address,
+                    'username' => $router->login,
+                    'password' => $router->password,
+                    'port'     => $router->ftp_port,
+                    'timeout'  => 30,
+                ]);
+
+                $file =$ftp->download("$backupFilename.$binaryBackupExtension");
+
             }catch (Exception $e){
                 $dataForUpdate['last_backup']=$timeUpdate." - ".$e->getMessage();
                 $router->update($dataForUpdate);
                 continue;
             }
 
-            if ($disk->put("/$router->name/".date('Y-m-d')."_$router->name.rsc",$data)){
-                $time = Carbon::now();
+            if ($this->putFileIntoDisk($path, $router->name,$backupFilename,$dataExport) ||
+                $this->putFileIntoDisk($path, $router->name,"$binaryBackupFilename.$binaryBackupExtension",$file)){
                 $dataForUpdate['last_backup']=$timeUpdate;
                 $router->update($dataForUpdate);
+
+                $systemBackupQuery = new Query('/file/remove');
+                $systemBackupQuery->equal('name', "$binaryBackupFilename.$binaryBackupExtension");
+                $client->query($systemBackupQuery);
             }else{
                 $dataForUpdate['last_backup']=$timeUpdate.' - Ошибка сохранения бекапа, проверь права и путь сохранения!';
                 $router->update($dataForUpdate);
             }
         }
+    }
+
+    private function putFileIntoDisk($path,$routerName, $backupFilename,  $data): bool
+    {
+        $disk = Storage::build([
+            'driver' => 'local',
+            'root' => $path,
+        ]);
+
+       return  $disk->put("/$routerName/".date('Y-m-d')."_$backupFilename",$data);
     }
 }

@@ -63,7 +63,8 @@ class Router extends Controller
                 'login'=>'required',
                 'password'=>'required',
                 'port'=>'required',
-                'ssh_port'=>'required'
+                'ssh_port'=>'required',
+                'ftp_port'=>'required'
             ]);
 
         if ($validator->fails()) {
@@ -79,6 +80,7 @@ class Router extends Controller
         $router->password = $request->password;
         $router->port = $request->port;
         $router->ssh_port = $request->ssh_port;
+        $router->ftp_port = $request->ftp_port;
         $router->save();
 
         return redirect('/router')->with('status','Сохранение успешно!');
@@ -132,7 +134,8 @@ class Router extends Controller
             'login'=>'required',
             'password'=>'required',
             'port'=>'required',
-            'ssh_port'=>'required'
+            'ssh_port'=>'required',
+            'ftp_port'=>'required'
         ]);
 
         $dataForUpdate['name']=$request->name;
@@ -141,6 +144,7 @@ class Router extends Controller
         $dataForUpdate['password']=$request->password;
         $dataForUpdate['port']=$request->port;
         $dataForUpdate['ssh_port']=$request->ssh_port;
+        $dataForUpdate['ftp_port']=$request->ftp_port;
 
 
         $router->update($dataForUpdate);

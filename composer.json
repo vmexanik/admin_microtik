@@ -13,6 +13,8 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.0",
+        "league/flysystem-ftp": "3.0",
+        "league/flysystem-sftp": "^3.6",
         "nesbot/carbon": "^2.63"
     },
     "require-dev": {
