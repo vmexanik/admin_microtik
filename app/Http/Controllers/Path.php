@@ -17,10 +17,16 @@ class Path extends Controller
         }
 
         $request->validate([
-            'path' => 'required'
+            'path' => 'required',
+            'user' => 'required',
+            'password' => 'required',
+            'host' => 'required'
         ]);
 
         $dataForUpdate['path']=$request->path;
+        $dataForUpdate['user']=$request->user;
+        $dataForUpdate['password']=$request->password;
+        $dataForUpdate['host']=$request->host;
         $dataForUpdate['id']=1;
 
         $pathModel->exists=true;

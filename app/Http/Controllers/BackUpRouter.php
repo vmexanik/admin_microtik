@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Router as RouterModel;
 use Carbon\Carbon;
+use ErrorException;
 use Exception;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use RouterOS\Client;
 use RouterOS\Config;
@@ -12,15 +14,17 @@ use RouterOS\Query;
 
 class BackUpRouter extends Controller
 {
+    private Filesystem $storage;
+
     public function index()
     {
-        $path=\App\Models\Path::where('id',1)->first()->path;
+        $path=\App\Models\Path::where('id',1)->first();
 
         $routers= RouterModel::all();
 
         foreach ($routers as $router){
             $time = Carbon::now();
-            $timeUpdate=$time->toDateTimeString('minute');
+            $timeUpdate=$time->format('Y-m-d');
 
             try{
                 $config = new Config([
@@ -31,28 +35,41 @@ class BackUpRouter extends Controller
                     'ssh_port' => $router->ssh_port,
                 ]);
 
+                $this->initStorage($path->host, $path->user, $path->password, $path->path, $router->name);
+
+                $backupFilename="$timeUpdate-$router->name.rsc";
+                $binaryBackupFilename="$timeUpdate-$router->name.backup";
+
                 $client = new Client($config);
                 $exportQuery = new Query('/export');
                 $dataExport=$client->query($exportQuery)->read();
-                $backupFilename="$router->name.rsc";
+
+                $this->putFileIntoDisk($router->name, $backupFilename, $dataExport);
 
                 $systemBackupQuery = new Query('/system/backup/save');
-                $systemBackupQuery->equal('name', 'system_backup_'.$timeUpdate);
-                $client->query($systemBackupQuery);
+                $systemBackupQuery->equal('name', $binaryBackupFilename);
+                $client->query($systemBackupQuery)->read();
 
-                $binaryBackupFilename='system_backup_'.$timeUpdate;
-                $binaryBackupExtension='backup';
+                $queryFetchBackup =new Query('/tool/fetch');
 
-                $ftp=Storage::build([
-                    'driver' => 'ftp',
-                    'host'     => $router->ip_address,
-                    'username' => $router->login,
-                    'password' => $router->password,
-                    'port'     => $router->ftp_port,
-                    'timeout'  => 30,
-                ]);
+                $queryFetchBackup->equal('address', $path->host)
+                    ->equal('mode', 'ftp')
+                    ->equal('user', $path->user)
+                    ->equal('password', $path->password)
+                    ->equal('src-path', $binaryBackupFilename)
+                    ->equal('dst-path', "/test/$router->name/$binaryBackupFilename")
+                    ->equal('keep-result', "yes")
+                    ->equal('upload', "yes");
 
-                $file =$ftp->download("$backupFilename.$binaryBackupExtension");
+                $responseFetchBackup=$client->query($queryFetchBackup)->read();
+
+                if ($responseFetchBackup[1]['status']!='finished' || $responseFetchBackup[1]['uploaded']=0){
+                    throw new ErrorException('cannot upload binary backup by ftp');
+                }
+
+                $systemBackupQueryDelete = new Query('/file/remove');
+                $systemBackupQueryDelete->equal('numbers',$binaryBackupFilename);
+                $responseDelete=$client->query($systemBackupQueryDelete)->read();
 
             }catch (Exception $e){
                 $dataForUpdate['last_backup']=$timeUpdate." - ".$e->getMessage();
@@ -60,28 +77,28 @@ class BackUpRouter extends Controller
                 continue;
             }
 
-            if ($this->putFileIntoDisk($path, $router->name,$backupFilename,$dataExport) ||
-                $this->putFileIntoDisk($path, $router->name,"$binaryBackupFilename.$binaryBackupExtension",$file)){
-                $dataForUpdate['last_backup']=$timeUpdate;
-                $router->update($dataForUpdate);
-
-                $systemBackupQuery = new Query('/file/remove');
-                $systemBackupQuery->equal('name', "$binaryBackupFilename.$binaryBackupExtension");
-                $client->query($systemBackupQuery);
-            }else{
-                $dataForUpdate['last_backup']=$timeUpdate.' - Ошибка сохранения бекапа, проверь права и путь сохранения!';
-                $router->update($dataForUpdate);
-            }
+            $dataForUpdate['last_backup']=$timeUpdate;
+            $router->update($dataForUpdate);
         }
     }
 
-    private function putFileIntoDisk($path,$routerName, $backupFilename,  $data): bool
+    private function putFileIntoDisk($routerName, $backupFilename,  $data): void
+    {
+        $this->storage->put("/$routerName/$backupFilename", $data);
+    }
+
+    private function initStorage($host, $user, $password, $rootDirectory, $routerName)
     {
         $disk = Storage::build([
-            'driver' => 'local',
-            'root' => $path,
+            'driver' => 'ftp',
+            'host'     => $host,
+            'username' => $user,
+            'password' => $password,
+            'root'=>$rootDirectory
         ]);
 
-       return  $disk->put("/$routerName/".date('Y-m-d')."_$backupFilename",$data);
+        $disk->createDirectory($routerName);
+
+        $this->storage=$disk;
     }
 }

@@ -11,7 +11,6 @@
                 <th scope="col">Пароль</th>
                 <th scope="col">Порт</th>
                 <th scope="col">Порт SSH</th>
-                <th scope="col">Порт FTP</th>
                 <th scope="col">Действие</th>
             </tr>
             </thead>
@@ -26,7 +25,6 @@
                         <td>{{$router->password}}</td>
                         <td>{{$router->port}}</td>
                         <td>{{$router->ssh_port}}</td>
-                        <td>{{$router->ftp_port}}</td>
                         <td class="d-flex">
                             <a type="button" class="btn btn-outline-success" style="margin-right: 5px" href="{{ route('router.edit',$router->id) }}">Редактировать</a>
                             <form action="{{ route('router.destroy',$router->id) }}" method="POST">
@@ -84,10 +82,6 @@
                 <input type="number" name="ssh_port" class="form-control" id="port_ssh" value="{{old('ssh_port')}}">
             </div>
             <div class="col-auto">
-                <label for="name" class="form-label">Порт FTP</label>
-                <input type="number" name="ftp_port" class="form-control" id="port_ftp" value="{{old('ftp_port')}}">
-            </div>
-            <div class="col-auto">
                 <button type="submit" class="btn btn-outline-primary">Добавить</button>
             </div>
         </form>
@@ -104,8 +98,20 @@
                 @endif
             </div>
             <div class="col">
-                <label for="name" class="form-label">Абсолютный путь</label>
-                <input type="text" name="path" class="form-control" id="path" value="{{$path}}">
+                <label for="name" class="form-label">root-путь</label>
+                <input type="text" name="path" class="form-control" id="path" value="{{$path->path}}">
+            </div>
+            <div class="col">
+                <label for="name" class="form-label">Логин</label>
+                <input type="text" name="user" class="form-control" id="path" value="{{$path->user}}">
+            </div>
+            <div class="col">
+                <label for="name" class="form-label">Пароль</label>
+                <input type="text" name="password" class="form-control" id="path" value="{{$path->password}}">
+            </div>
+            <div class="col">
+                <label for="name" class="form-label">Хост</label>
+                <input type="text" name="host" class="form-control" id="path" value="{{$path->host}}">
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-outline-primary">Добавить</button>

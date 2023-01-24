@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Fop;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use RouterOS\Client;
-use RouterOS\Config;
 use RouterOS\Exceptions\BadCredentialsException;
 use RouterOS\Exceptions\ClientException;
 use RouterOS\Exceptions\ConfigException;
@@ -39,7 +34,7 @@ class Router extends Controller
         if (is_null($path)){
             $path='';
         }else{
-            $path=$path->path;
+            $path=$path;
         }
 
         return view('router/list',[
@@ -63,8 +58,7 @@ class Router extends Controller
                 'login'=>'required',
                 'password'=>'required',
                 'port'=>'required',
-                'ssh_port'=>'required',
-                'ftp_port'=>'required'
+                'ssh_port'=>'required'
             ]);
 
         if ($validator->fails()) {
@@ -80,7 +74,6 @@ class Router extends Controller
         $router->password = $request->password;
         $router->port = $request->port;
         $router->ssh_port = $request->ssh_port;
-        $router->ftp_port = $request->ftp_port;
         $router->save();
 
         return redirect('/router')->with('status','Сохранение успешно!');
@@ -135,7 +128,6 @@ class Router extends Controller
             'password'=>'required',
             'port'=>'required',
             'ssh_port'=>'required',
-            'ftp_port'=>'required'
         ]);
 
         $dataForUpdate['name']=$request->name;
@@ -144,7 +136,6 @@ class Router extends Controller
         $dataForUpdate['password']=$request->password;
         $dataForUpdate['port']=$request->port;
         $dataForUpdate['ssh_port']=$request->ssh_port;
-        $dataForUpdate['ftp_port']=$request->ftp_port;
 
 
         $router->update($dataForUpdate);

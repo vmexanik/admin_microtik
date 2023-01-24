@@ -34,10 +34,6 @@
                     <input type="text" name="ssh_port" class="form-control" id="port" value="{{$router->ssh_port}}">
                 </div>
                 <div class="col-auto">
-                    <label for="name" class="form-label">FTP Порт</label>
-                    <input type="text" name="ftp_port" class="form-control" id="port" value="{{$router->ftp_port}}">
-                </div>
-                <div class="col-auto">
                     <label for="name" class="form-label">Логин</label>
                     <input type="text" name="login" class="form-control" id="login" value="{{$router->login}}">
                 </div>
