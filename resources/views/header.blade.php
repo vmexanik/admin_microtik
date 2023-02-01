@@ -3,6 +3,10 @@
 <head>
     @vite('resources/sass/app.scss')
 
+    @if(Request::is('/'))
+        @vite('resources/js/check_router_status.js')
+    @endif
+
     @if(Request::is('update_router'))
         @vite('resources/js/update_router.js')
     @endif

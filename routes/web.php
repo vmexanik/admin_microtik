@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [Main::class,'index'])->middleware('auth');
+Route::get('/check_status_router_stream/{id}', [Main::class,'check_router_status_stream'])->middleware('auth');
 
 Route::resource('router', Router::class)->middleware('auth');
 

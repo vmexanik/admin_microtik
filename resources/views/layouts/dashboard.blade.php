@@ -28,25 +28,12 @@
     <tbody>
     @foreach($routers as $router)
         <tr class="align-middle">
-            <td scope="row">{{$router->id}}</td>
+            <td scope="row" router-id="{{$router->id}}">{{$router->id}}</td>
             <td>{{$router->name}}</td>
             <td>{{$router->ip_address}}</td>
-            @if(!isset($router->error))
-                <td>{{$router->uptime}}</td>
-                <td>{{$router->os_version}}</td>
-            @else
-                <td colspan="2"></td>
-            @endif
-            <td>
-                @if(isset($router->error))
-                    <span class="badge bg-danger">{{$router->status}}</span>
-                    <span class="invalid-feedback d-block">
-                        {{$router->error}}
-                    </span>
-                @else
-                    <span class="badge bg-success">{{$router->status}}</span>
-                @endif
-            </td>
+            <td id="uptime-{{$router->id}}"></td>
+            <td id="os_version-{{$router->id}}"></td>
+            <td id="router_status-{{$router->id}}"></td>
             <td>{{$router->last_backup}}</td>
         </tr>
     @endforeach
