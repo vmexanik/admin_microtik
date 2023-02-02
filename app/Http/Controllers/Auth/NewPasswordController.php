@@ -44,7 +44,6 @@ class NewPasswordController extends Controller
     {
         $request->validate([
             'name' => ['required'],
-            'email' => ['required', 'email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
