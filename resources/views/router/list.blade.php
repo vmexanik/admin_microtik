@@ -85,38 +85,40 @@
                 <button type="submit" class="btn btn-outline-primary">Добавить</button>
             </div>
         </form>
-        <h3 class="mt-2">Путь сохранения бекапов</h3>
-        <form class="row gy-2 gx-3 align-items-end border rounded m-0 pb-2" method="get" action="/path">
-            @csrf
-            <div class="mb-3">
-                @if ($errors->any())
-                    <div class="invalid-feedback d-block">
-                        @foreach ($errors->all() as $error)
-                            {{$error}}
-                        @endforeach
-                    </div>
-                @endif
-            </div>
-            <div class="col">
-                <label for="name" class="form-label">root-путь</label>
-                <input type="text" name="path" class="form-control" id="path" value="{{$path->path}}">
-            </div>
-            <div class="col">
-                <label for="name" class="form-label">Логин</label>
-                <input type="text" name="user" class="form-control" id="path" value="{{$path->user}}">
-            </div>
-            <div class="col">
-                <label for="name" class="form-label">Пароль</label>
-                <input type="text" name="password" class="form-control" id="path" value="{{$path->password}}">
-            </div>
-            <div class="col">
-                <label for="name" class="form-label">Хост</label>
-                <input type="text" name="host" class="form-control" id="path" value="{{$path->host}}">
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-outline-primary">Добавить</button>
-            </div>
-        </form>
+        @if (Auth::user()->user_type=='admin')
+            <h3 class="mt-2">Путь сохранения бекапов</h3>
+            <form class="row gy-2 gx-3 align-items-end border rounded m-0 pb-2" method="get" action="/path">
+                @csrf
+                <div class="mb-3">
+                    @if ($errors->any())
+                        <div class="invalid-feedback d-block">
+                            @foreach ($errors->all() as $error)
+                                {{$error}}
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+                <div class="col">
+                    <label for="name" class="form-label">root-путь</label>
+                    <input type="text" name="path" class="form-control" id="path" value="{{$path->path}}">
+                </div>
+                <div class="col">
+                    <label for="name" class="form-label">Логин</label>
+                    <input type="text" name="user" class="form-control" id="path" value="{{$path->user}}">
+                </div>
+                <div class="col">
+                    <label for="name" class="form-label">Пароль</label>
+                    <input type="text" name="password" class="form-control" id="path" value="{{$path->password}}">
+                </div>
+                <div class="col">
+                    <label for="name" class="form-label">Хост</label>
+                    <input type="text" name="host" class="form-control" id="path" value="{{$path->host}}">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-outline-primary">Добавить</button>
+                </div>
+            </form>
+        @endif
     </div>
 </main>
 @include('footer')
