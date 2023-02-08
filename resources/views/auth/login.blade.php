@@ -6,7 +6,7 @@
                 @csrf
                 <!-- Email Address -->
                 <div class="mb-3">
-                    <label for="name" class="form-label">Имя</label>
+                    <label for="name" class="form-label">Name</label>
                     <input id="name" name="name" value="{{old('name')}}" class="form-control"
                            aria-describedby="emailHelp">
                     @if ($errors->has('name'))
@@ -17,16 +17,16 @@
                 </div>
                 <!-- Password -->
                 <div class="mb-3">
-                    <label for="password" class="form-label">Пароль</label>
+                    <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password"
                            name="password" required autocomplete="current-password">
                 </div>
                 <!-- Remember Me -->
                 <div class="mb-3 form-check">
                     <input name="remember" type="checkbox" class="form-check-input" id="remember_me" >
-                    <label class="form-check-label" for="exampleCheck1">Запомнить меня</label>
+                    <label class="form-check-label" for="exampleCheck1">Remember Me</label>
                 </div>
-                <button type="submit" class="btn btn-primary">Вход</button>
+                <button type="submit" class="btn btn-primary">Login</button>
             </form>
         </div>
     </div>
