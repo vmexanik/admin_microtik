@@ -2,7 +2,7 @@
 <main class="flex-shrink-0">
     <div class="container mt-2 text-end">
         <button type="button" class="btn btn-outline-success disabled" disabled style="margin-right: 5px" id="update_selected"
-                onclick="updateRoutes()">Обновить ПО</button>
+                onclick="updateRoutes()">Update ROS</button>
     </div>
     <div class="container">
         <table class="table table-hover mt-2">
@@ -12,11 +12,11 @@
                     <input class="form-check-input" type="checkbox" name="check_all" value="all">
                 </th>
                 <th scope="col">#</th>
-                <th scope="col">Название</th>
+                <th scope="col">Router Name</th>
                 <th scope="col">IP</th>
-                <th scope="col">Статус</th>
-                <th scope="col">Установленная версия</th>
-                <th scope="col">Последняя версия</th>
+                <th scope="col">Status</th>
+                <th scope="col">Installed RoS version</th>
+                <th scope="col">Available RoS version</th>
             </tr>
             </thead>
             <tbody>
@@ -37,7 +37,7 @@
                 @endforeach
             @else
                 <tr class="align-middle">
-                    <td scope="row" colspan="7">Нет ни одного роутера</td>
+                    <td scope="row" colspan="7">Nothing..</td>
                 </tr>
             @endif
             </tbody>

@@ -5,13 +5,13 @@
             <thead class="thead-light">
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Название</th>
+                <th scope="col">Router Name</th>
                 <th scope="col">IP</th>
-                <th scope="col">Логин</th>
-                <th scope="col">Пароль</th>
-                <th scope="col">Порт</th>
-                <th scope="col">Порт SSH</th>
-                <th scope="col">Действие</th>
+                <th scope="col">Login</th>
+                <th scope="col">Password</th>
+                <th scope="col">API Port</th>
+                <th scope="col">SSH Port</th>
+                <th scope="col">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -26,13 +26,13 @@
                         <td>{{$router->port}}</td>
                         <td>{{$router->ssh_port}}</td>
                         <td class="d-flex">
-                            <a type="button" class="btn btn-outline-success" style="margin-right: 5px" href="{{ route('router.edit',$router->id) }}">Редактировать</a>
+                            <a type="button" class="btn btn-outline-success" style="margin-right: 5px" href="{{ route('router.edit',$router->id) }}">Edit</a>
                             <form action="{{ route('router.destroy',$router->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="id" value="{{$router->id}}">
                                 <button type="submit" class="btn btn-outline-danger">
-                                    <i class="fa fa-trash"></i> Удалить
+                                    <i class="fa fa-trash"></i> Delete
                                 </button>
                             </form>
                         </td>
@@ -40,12 +40,12 @@
                 @endforeach
             @else
                 <tr class="align-middle">
-                    <td scope="row" colspan="7">Нет ни одного роутера</td>
+                    <td scope="row" colspan="7">Nothing..</td>
                 </tr>
             @endif
             </tbody>
         </table>
-        <h3>Добавление роутера</h3>
+        <h3>Add New Router</h3>
         <form class="row gy-2 gx-3 align-items-end border rounded m-0 pb-2" method="get" action="{{ route('router.create') }}">
             @csrf
             <div class="mb-3">
@@ -58,7 +58,7 @@
                 @endif
             </div>
             <div class="col-auto">
-                <label for="name" class="form-label">Имя</label>
+                <label for="name" class="form-label">Router Name</label>
                 <input type="text" name="name" class="form-control" id="name" value="{{old('name')}}">
             </div>
             <div class="col-auto">
@@ -66,27 +66,27 @@
                 <input type="text" name="ip_address" class="form-control" id="ip_address" value="{{old('ip_address')}}">
             </div>
             <div class="col-auto">
-                <label for="name" class="form-label">Порт</label>
+                <label for="name" class="form-label">API Port</label>
                 <input type="number" name="port" class="form-control" id="port" value="@if (!old('port')){{8728}}@else{{old('port')}}@endif">
             </div>
             <div class="col-auto">
-                <label for="name" class="form-label">Логин</label>
+                <label for="name" class="form-label">Login</label>
                 <input type="text" name="login" class="form-control" id="login" value="{{old('login')}}">
             </div>
             <div class="col-auto">
-                <label for="name" class="form-label">Пароль</label>
+                <label for="name" class="form-label">Password</label>
                 <input type="text" name="password" class="form-control" id="password" value="{{old('password')}}">
             </div>
             <div class="col-auto">
-                <label for="name" class="form-label">Порт SSH</label>
+                <label for="name" class="form-label">SSH Port</label>
                 <input type="number" name="ssh_port" class="form-control" id="port_ssh" value="{{old('ssh_port')}}">
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-outline-primary">Добавить</button>
+                <button type="submit" class="btn btn-outline-primary">Add</button>
             </div>
         </form>
         @if (Auth::user()->user_type=='admin')
-            <h3 class="mt-2">Путь сохранения бекапов</h3>
+            <h3 class="mt-2">Backup Path</h3>
             <form class="row gy-2 gx-3 align-items-end border rounded m-0 pb-2" method="get" action="/path">
                 @csrf
                 <div class="mb-3">
@@ -99,23 +99,23 @@
                     @endif
                 </div>
                 <div class="col">
-                    <label for="name" class="form-label">root-путь</label>
+                    <label for="name" class="form-label">root-path</label>
                     <input type="text" name="path" class="form-control" id="path" value="{{$path->path}}">
                 </div>
                 <div class="col">
-                    <label for="name" class="form-label">Логин</label>
+                    <label for="name" class="form-label">User</label>
                     <input type="text" name="user" class="form-control" id="path" value="{{$path->user}}">
                 </div>
                 <div class="col">
-                    <label for="name" class="form-label">Пароль</label>
+                    <label for="name" class="form-label">Password</label>
                     <input type="text" name="password" class="form-control" id="path" value="{{$path->password}}">
                 </div>
                 <div class="col">
-                    <label for="name" class="form-label">Хост</label>
+                    <label for="name" class="form-label">FTP Host</label>
                     <input type="text" name="host" class="form-control" id="path" value="{{$path->host}}">
                 </div>
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-outline-primary">Добавить</button>
+                    <button type="submit" class="btn btn-outline-primary">Add</button>
                 </div>
             </form>
         @endif

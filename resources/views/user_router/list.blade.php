@@ -3,16 +3,16 @@
     <div class="container mt-2">
         <div class="row row-cols-3 row-cols-lg-3">
             <div class="col-auto">
-                <label for="name" class="form-label">Логин</label>
+                <label for="name" class="form-label">Login</label>
                 <input type="text" name="login" class="form-control" id="login" value="">
             </div>
             <div class="col-auto">
-                <label for="name" class="form-label">Пароль</label>
+                <label for="name" class="form-label">Password</label>
                 <input type="text" name="password" class="form-control" id="password" value="">
             </div>
             <div class="col-auto align-items-end d-flex">
             <button type="button" class="btn btn-outline-success" style="margin-right: 5px" id="update_password_selected"
-                    onclick="updateUserPasswords()">Изменить пароли</button>
+                    onclick="updateUserPasswords()">Change passwords</button>
             </div>
         </div>
     </div>
@@ -24,9 +24,9 @@
                     <input class="form-check-input" type="checkbox" name="check_all" value="all">
                 </th>
                 <th scope="col">#</th>
-                <th scope="col">Название</th>
+                <th scope="col">Router Name</th>
                 <th scope="col">IP</th>
-                <th scope="col">Статус</th>
+                <th scope="col">Status</th>
             </tr>
             </thead>
             <tbody>
@@ -45,7 +45,7 @@
                 @endforeach
             @else
                 <tr class="align-middle">
-                    <td scope="row" colspan="7">Нет ни одного роутера</td>
+                    <td scope="row" colspan="7">Nothing..</td>
                 </tr>
             @endif
             </tbody>

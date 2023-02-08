@@ -17,12 +17,12 @@
     <thead class="thead-light">
     <tr>
         <th scope="col">#</th>
-        <th scope="col">Название</th>
+        <th scope="col">Router</th>
         <th scope="col">IP</th>
-        <th scope="col">Время работы</th>
-        <th scope="col">Версия ОС</th>
-        <th scope="col">Статус</th>
-        <th scope="col">Последний бекап</th>
+        <th scope="col">Uptime</th>
+        <th scope="col">RouterOS Version</th>
+        <th scope="col">Status</th>
+        <th scope="col">Last backup</th>
     </tr>
     </thead>
     <tbody>
