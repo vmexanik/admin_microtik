@@ -37,25 +37,25 @@
                         @auth
                             <li class="nav-item">
                                 <a class="nav-link {{ (Request::is('/') ? 'active' : '') }}" aria-current="page"
-                                   href="/">Главная</a>
+                                   href="/">Main</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ (Request::is('router') ? 'active' : '') }}" aria-current="page"
-                                   href="/router">Роутеры</a>
+                                   href="/router">Routers</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ (Request::is('update_router') ? 'active' : '') }}" aria-current="page"
-                                   href="/update_router">Обновление ПО</a>
+                                   href="/update_router">Update RoS</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ (Request::is('user_router') ? 'active' : '') }}"
                                    aria-current="page"
-                                   href="/user_router">Изменение паролей</a>
+                                   href="/user_router">Change passwords</a>
                             </li>
                             @if (Auth::user()->user_type=='admin')
                                 <li class="nav-item">
                                     <a class="nav-link {{ (Request::is('register') ? 'active' : '') }}"
-                                       href="/register">Регистрация</a>
+                                       href="/register">Register new admin</a>
                                 </li>
                             @endif
                         @endauth
@@ -67,10 +67,10 @@
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <a class="btn btn-outline-secondary" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                        this.closest('form').submit();">Выход</a>
+                                        this.closest('form').submit();">Logout</a>
                             </form>
                         @else
-                            <a class="btn btn-outline-secondary" href="{{ route('login') }}">Вход</a>
+                            <a class="btn btn-outline-secondary" href="{{ route('login') }}">Login</a>
                         @endauth
                     @endif
                 </div>
