@@ -23,6 +23,7 @@ class BackUpRouter extends Controller
         $routers= RouterModel::all();
 
         foreach ($routers as $router){
+            $dataForUpdate=[];
             $time = Carbon::now();
             $timeUpdate=$time->format('Y-m-d');
 
@@ -78,6 +79,7 @@ class BackUpRouter extends Controller
             }
 
             $dataForUpdate['last_backup']=$timeUpdate;
+            $dataForUpdate['last_success_backup']=$timeUpdate;
             $router->update($dataForUpdate);
         }
     }

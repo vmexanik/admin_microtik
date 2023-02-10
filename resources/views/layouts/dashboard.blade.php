@@ -23,6 +23,7 @@
         <th scope="col">RouterOS Version</th>
         <th scope="col">Status</th>
         <th scope="col">Last backup</th>
+        <th scope="col">Last success backup</th>
     </tr>
     </thead>
     <tbody>
@@ -35,6 +36,7 @@
             <td id="os_version-{{$router->id}}"></td>
             <td id="router_status-{{$router->id}}"></td>
             <td>{{$router->last_backup}}</td>
+            <td>{{$router->last_success_backup}}</td>
         </tr>
     @endforeach
     </tbody>
