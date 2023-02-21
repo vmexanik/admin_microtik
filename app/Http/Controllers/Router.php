@@ -74,6 +74,7 @@ class Router extends Controller
         $router->password = $request->password;
         $router->port = $request->port;
         $router->ssh_port = $request->ssh_port;
+        $router->last_success_backup = '';
         $router->save();
 
         return redirect('/router')->with('status','Сохранение успешно!');
