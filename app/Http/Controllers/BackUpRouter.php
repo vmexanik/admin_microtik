@@ -58,7 +58,7 @@ class BackUpRouter extends Controller
                     ->equal('user', $path->user)
                     ->equal('password', $path->password)
                     ->equal('src-path', $binaryBackupFilename)
-                    ->equal('dst-path', "/test/$router->name/$binaryBackupFilename")
+                    ->equal('dst-path', "/$router->name/$binaryBackupFilename")
                     ->equal('keep-result', "yes")
                     ->equal('upload', "yes");
 
